@@ -2,8 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-    <script type="text/javascript" src="inpage_translator.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script> <script type="text/javascript"> var InpageTranslator = { Version : '0.1.0', DefaultLanguage : 'en', _debugLanguage : null, browserLanguage: function() { if(this._debugLanguage) { return this._debugLanguage; } else if(navigator.userLanguage) { return navigator.userLanguage; } else if(navigator.language) { return navigator.language; }; }, detectLanguage: function() { return ( this.browserLanguage() || this.DefaultLanguage ).split('-')[0]; }, langSelector: function() { var lang = this.detectLanguage(), klass = 'lang-'+lang; return $('*').hasClass(klass) ? ('.'+klass) : null; }, work: function() { var selector = this.langSelector(); if(selector) { $(selector).show(); $('*[class^=lang-]').not(selector).hide(); }; } }; $(document).ready(function(){ InpageTranslator.work(); }); </script>
   </head>
   <body>
     <h1>Test inpage_translator.js</h1>

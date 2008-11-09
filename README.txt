@@ -21,6 +21,15 @@ Provides an alternative multi-language support for:
    </script>
    <script type="text/javascript" src="inpage_translator.js"></script>
 
+   OR:
+
+   <script type="text/javascript"
+     src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js">
+   </script>
+   <script type="text/javascript" >...</script>
+
+   Where '...' is the entire content of inpage_translator_min.js script.
+
 2. For any content that should support multiple languages, write your contents
    as followings:
 
