@@ -33,31 +33,34 @@ Provides an alternative multi-language support for:
 2. For any content that should support multiple languages, write your contents
    as followings:
 
-   <p class='lang-en' >
-     some english content
-   </p>
-   <p class='lang-zh' >
-     中文内容
-   </p>
+   <p class='lang-en' > ... </p>
+   <p class='lang-zh' > ... </p>
 
    Depending on the user's browser language, either the English (en) or the 
    Chinese (zh) content will be displayed.
 
-3. The default language is 'en', it is possible to override this by setting:
+3. Instead of having the translator decides which language to display, user can 
+   choose the language for display (or show contents of all languages) from the 
+   generated language select dropdown. 
    
-   InpageTranslator.DefaultLanguage = 'fr'
+   It is possible to override the look & feel of this dropdown by:
+
+   InpageTranslator.LangMenuCss['div'] = { ... }
+   InpageTranslator.LangMenuCss['select'] = { ... }
 
    (see script inpage_translator.js)
 
 === Caveats
 
 1. If user's browser is using a language not anticipated on the page, the 
-   default language 'en' will be displayed instead (see section <Usage> point 3)
+   1st detected language will be displayed, eg.
+   
+   <p class='lang-zh' > ... </p>
+   <p class='lang-en' > ... </p>
 
-2. If all contents don't match both browser and default language, all contents
-   will be displayed
+   for the above, 'zh' comes before 'en', thus 'zh' content will be displayed.
 
-3. If the browser's javascript support is turned off, all contents will be 
+2. If the browser's javascript support is turned off, all contents will be 
    displayed
 
 # __END__

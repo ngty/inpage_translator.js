@@ -2,10 +2,82 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script> <script type="text/javascript"> var InpageTranslator = { Version : '0.1.0', DefaultLanguage : 'en', _debugLanguage : null, browserLanguage: function() { if(this._debugLanguage) { return this._debugLanguage; } else if(navigator.userLanguage) { return navigator.userLanguage; } else if(navigator.language) { return navigator.language; }; }, detectLanguage: function() { return ( this.browserLanguage() || this.DefaultLanguage ).split('-')[0]; }, langSelector: function() { var lang = this.detectLanguage(), klass = 'lang-'+lang; return $('*').hasClass(klass) ? ('.'+klass) : null; }, work: function() { var selector = this.langSelector(); if(selector) { $(selector).show(); $('*[class^=lang-]').not(selector).hide(); }; } }; $(document).ready(function(){ InpageTranslator.work(); }); </script>
+    <script type="text/javascript" src="jquery.min.js"></script> 
+    <script type="text/javascript">
+    var InpageTranslator = { Version : '0.2.0', LangMenu : $('<div id="inpage_traslator_menu"><select></select></div>'), LangOptions : { en:'English', zh:'中文' }, AllLangs : { en:'Show All', zh:'显示所有', _:'Show All' }, LangMenuCss : { div : { position:'fixed', top:'30px', right:'10px', 'z-index':999 }, select : { 'line-height':1, 'background-color':'#eee', border:'solid 1px #666', color:'#000' }, }, getSupportedLangs: function() { var hash = this.getSupportedLangsHash(), langs = []; return this._supportedLangs = this._supportedLangs || function() { for( lang in hash ) { langs.push(lang); } return langs; }(); }, getSupportedLangsHash: function() { return this._supportedLangsHash = this._supportedLangsHash || function() { var hash = {}; $.each( $('*[class^=lang-]'), function() { var lang = $(this).attr('class').replace(/lang-(\w+)/,'$1'); hash[lang] = lang; } ); return hash; }(); }, getBrowserLang: function() { return this._browserLang = this._browserLang || function() { if(navigator.userLanguage) { return navigator.userLanguage; } else if(navigator.language) { return navigator.language; } }().split('-')[0]; }, getDetectedLang: function() { return this.SelectedLang || this.getBrowserLang() || this.getSupportedLangs()[0]; }, createLangMenu : function() { var me = this, sLangs = me.getSupportedLangs(); me._createLangMenu || function() { me._createLangMenu = true; if(sLangs.length>1) { $('body').append(me.LangMenu); }; }(); return me; }, createLangOption: function(lang) { var me = InpageTranslator, dLang = me.getDetectedLang(), oLangs = me.LangOptions, aLangs = me.AllLangs, css = me.LangMenuCss; return $('<option></option>') .html( (lang!='_') ? (oLangs[lang]||lang.toUpperCase()) : (aLangs[dLang]||aLangs['_']) ) .click( function() { me.SelectedLang = lang || '--'; me.updateLangMenu().work(); } ); }, updateLangMenu: function() { var me = this, orders = me.getLangOptionsOrder(), options = [], css = me.LangMenuCss, select = me.LangMenu.css(css['div']).find('select').css(css['select']).empty(); for( i in orders ) { select.append( me.createLangOption(orders[i]) ); }; return me; }, getLangOptionsOrder: function() { var me = this, order = [ '_' ], hash = me.getSupportedLangsHash(), dLang = me.getDetectedLang(); if(hash[dLang]) { order.unshift(dLang); }; for( lang in hash ) { (hash[lang]!=hash[dLang]) && order.push(lang); }; return order; }, langClass: function() { var lang = this.getDetectedLang(); return this.getSupportedLangsHash()[lang] && ('lang-'+lang); }, work: function() { var klass = this.createLangMenu().updateLangMenu().langClass(), elements = $('*[class^=lang-]').show(); klass && elements.not('.'+klass).hide(); } }; $(document).ready(function(){ InpageTranslator.work(); });</script>
   </head>
   <body>
     <h1>Test inpage_translator.js</h1>
+    <p class='lang-en'>
+      You should see this section if your brower's language is: <br/>
+      * in English, OR <br/>
+      * neither English nor Chinese <br/>
+    </p>
+    <p class='lang-zh' >
+      你应该看见这个段落，如果你的浏览器的语言：<br/>
+      * 中文，或 <br/>
+      * 不是英文也不是中文 <br/>
+    </p>
+    <p class='lang-en'>
+      You should see this section if your brower's language is: <br/>
+      * in English, OR <br/>
+      * neither English nor Chinese <br/>
+    </p>
+    <p class='lang-zh' >
+      你应该看见这个段落，如果你的浏览器的语言：<br/>
+      * 中文，或 <br/>
+      * 不是英文也不是中文 <br/>
+    </p>
+    <p class='lang-en'>
+      You should see this section if your brower's language is: <br/>
+      * in English, OR <br/>
+      * neither English nor Chinese <br/>
+    </p>
+    <p class='lang-zh' >
+      你应该看见这个段落，如果你的浏览器的语言：<br/>
+      * 中文，或 <br/>
+      * 不是英文也不是中文 <br/>
+    </p>
+    <p class='lang-en'>
+      You should see this section if your brower's language is: <br/>
+      * in English, OR <br/>
+      * neither English nor Chinese <br/>
+    </p>
+    <p class='lang-zh' >
+      你应该看见这个段落，如果你的浏览器的语言：<br/>
+      * 中文，或 <br/>
+      * 不是英文也不是中文 <br/>
+    </p>
+    <p class='lang-en'>
+      You should see this section if your brower's language is: <br/>
+      * in English, OR <br/>
+      * neither English nor Chinese <br/>
+    </p>
+    <p class='lang-zh' >
+      你应该看见这个段落，如果你的浏览器的语言：<br/>
+      * 中文，或 <br/>
+      * 不是英文也不是中文 <br/>
+    </p>
+    <p class='lang-en'>
+      You should see this section if your brower's language is: <br/>
+      * in English, OR <br/>
+      * neither English nor Chinese <br/>
+    </p>
+    <p class='lang-zh' >
+      你应该看见这个段落，如果你的浏览器的语言：<br/>
+      * 中文，或 <br/>
+      * 不是英文也不是中文 <br/>
+    </p>
+    <p class='lang-en'>
+      You should see this section if your brower's language is: <br/>
+      * in English, OR <br/>
+      * neither English nor Chinese <br/>
+    </p>
+    <p class='lang-zh' >
+      你应该看见这个段落，如果你的浏览器的语言：<br/>
+      * 中文，或 <br/>
+      * 不是英文也不是中文 <br/>
+    </p>
     <p class='lang-en'>
       You should see this section if your brower's language is: <br/>
       * in English, OR <br/>

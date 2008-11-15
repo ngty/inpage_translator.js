@@ -1,4 +1,4 @@
-// $Id: NgTzeYang [ngty77@gmail.com] 09 Nov 2008 15:25 $
+// $Id: NgTzeYang [ngty77@gmail.com] 15 Nov 2008 14:56 $
 // ---
 //
 // Copyright (c) 2008 Ng Tze Yang <ngty77@gmail.com>
@@ -22,47 +22,105 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-// For details, see http://github.com/ngty/inline_js_translator/tree
+// For details, see http://github.com/ngty/inline_js_translator
 //
 
 var InpageTranslator = {
 
-  Version         : '0.1.0',
-  DefaultLanguage : 'en',
-  _debugLanguage  : null, // intended for debug purpose 
+  Version     : '0.2.0',
+  LangMenu    : $('<div id="inpage_traslator_menu"><select></select></div>'),
+  LangOptions : { en:'English', zh:'中文' },
+  AllLangs    : { en:'Show All', zh:'显示所有', _:'Show All' },
 
-  browserLanguage: function() {
-    if(this._debugLanguage) {
-      return this._debugLanguage;
-    } else if(navigator.userLanguage) {    // IE
-      return navigator.userLanguage;
-    } else if(navigator.language) {        // FF
-      return navigator.language;
-    };
+  LangMenuCss : { 
+    div    : { position:'fixed', top:'30px', right:'10px', 'z-index':999 },
+    select : { 'line-height':1, 'background-color':'#eee', border:'solid 1px #666', color:'#000' },
+    },
+
+  getSupportedLangs: function() {
+    var hash = this.getSupportedLangsHash(), langs = [];
+    return this._supportedLangs = this._supportedLangs || function() {
+        for( lang in hash ) { langs.push(lang); }
+        return langs; 
+      }();
   },
 
-  detectLanguage: function() {
-    return ( this.browserLanguage() || this.DefaultLanguage ).split('-')[0];
+  getSupportedLangsHash: function() {
+    return this._supportedLangsHash = this._supportedLangsHash || function() {
+      var hash = {};
+      $.each( $('*[class^=lang-]'), function() {
+        var lang = $(this).attr('class').replace(/lang-(\w+)/,'$1');
+        hash[lang] = lang;
+      } );
+      return hash;
+    }();
   },
 
-  langSelector: function() {
-    var lang = this.detectLanguage(), klass = 'lang-'+lang;
-    return $('*').hasClass(klass) ? ('.'+klass) : null;
+  getBrowserLang: function() {
+    return this._browserLang = this._browserLang || function() {
+        if(navigator.userLanguage) {    
+          return navigator.userLanguage;
+        } else if(navigator.language) {        
+          return navigator.language;
+        } 
+      }().split('-')[0];
+  },
+
+  getDetectedLang: function() {
+    return this.SelectedLang || this.getBrowserLang() || this.getSupportedLangs()[0];
+  },
+
+  createLangMenu : function() {
+    var me = this, sLangs = me.getSupportedLangs();
+    me._createLangMenu || function() {
+        me._createLangMenu = true;
+        if(sLangs.length>1) { $('body').append(me.LangMenu); };
+      }();
+    return me;
+  },
+
+  createLangOption: function(lang) {
+    var me = InpageTranslator, dLang = me.getDetectedLang(), oLangs = me.LangOptions, 
+      aLangs = me.AllLangs, css = me.LangMenuCss;
+    return $('<option></option>')
+      .html( (lang!='_') ? (oLangs[lang]||lang.toUpperCase()) : (aLangs[dLang]||aLangs['_']) )
+      .click( function() { 
+        me.SelectedLang = lang || '--';
+        me.updateLangMenu().work();
+      } );
+  },
+
+  updateLangMenu: function() {
+    var me = this, orders = me.getLangOptionsOrder(), options = [], css = me.LangMenuCss,
+      select = me.LangMenu.css(css['div']).find('select').css(css['select']).empty();
+    for( i in orders ) { select.append( me.createLangOption(orders[i]) ); };
+    return me;
+  },
+
+  getLangOptionsOrder: function() {
+    var me = this, order = [ '_' ], hash = me.getSupportedLangsHash(), dLang = me.getDetectedLang();
+    if(hash[dLang]) { order.unshift(dLang); };
+    for( lang in hash ) { (hash[lang]!=hash[dLang]) && order.push(lang); };
+    return order;
+  },
+
+  langClass: function() {
+    var lang = this.getDetectedLang();
+    return this.getSupportedLangsHash()[lang] && ('lang-'+lang);
   },
 
   work: function() {
-    var selector = this.langSelector();
-    if(selector) {
-      $(selector).show();
-      $('*[class^=lang-]').not(selector).hide();
-    };
+    var klass = this.createLangMenu().updateLangMenu().langClass(), 
+      elements = $('*[class^=lang-]').show();
+    klass && elements.not('.'+klass).hide();
   }
 
 };
 
 //
-// Available Customizations:
-// InpageTranslator.DefaultLanguage = 'en';
+// Supported Customization:
+// InpageTranslator.LangMenuCss['div'] = { ... }
+// InpageTranslator.LangMenuCss['select'] = { ... }
 //
 
 $(document).ready(function(){
