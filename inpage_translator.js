@@ -1,4 +1,4 @@
-// $Id: NgTzeYang [ngty77@gmail.com] 15 Nov 2008 14:56 $
+// $Id: NgTzeYang [ngty77@gmail.com] 15 Nov 2008 15:45 $
 // ---
 //
 // Copyright (c) 2008 Ng Tze Yang <ngty77@gmail.com>
@@ -27,13 +27,13 @@
 
 var InpageTranslator = {
 
-  Version     : '0.2.0',
+  Version     : '0.2.1',
   LangMenu    : $('<div id="inpage_traslator_menu"><select></select></div>'),
   LangOptions : { en:'English', zh:'中文' },
   AllLangs    : { en:'Show All', zh:'显示所有', _:'Show All' },
 
   LangMenuCss : { 
-    div    : { position:'fixed', top:'30px', right:'10px', 'z-index':999 },
+    div    : { position:'absolute', top:'40px', right:'10px', 'z-index':999 },
     select : { 'line-height':1, 'background-color':'#eee', border:'solid 1px #666', color:'#000' },
     },
 
@@ -93,7 +93,11 @@ var InpageTranslator = {
   updateLangMenu: function() {
     var me = this, orders = me.getLangOptionsOrder(), options = [], css = me.LangMenuCss,
       select = me.LangMenu.css(css['div']).find('select').css(css['select']).empty();
-    for( i in orders ) { select.append( me.createLangOption(orders[i]) ); };
+    for( i in orders ) { 
+      if(!$.isFunction(orders[i])) { 
+        select.append( me.createLangOption(orders[i]) ); 
+      };
+    };
     return me;
   },
 
@@ -119,8 +123,11 @@ var InpageTranslator = {
 
 //
 // Supported Customization:
-// InpageTranslator.LangMenuCss['div'] = { ... }
-// InpageTranslator.LangMenuCss['select'] = { ... }
+// ---
+// InpageTranslator.LangMenuCss['div'] = 
+//   { position:'absolute', top:'40px', right:'10px' };
+// InpageTranslator.LangMenuCss['select'] = 
+//   { 'background-color':'#eee', border:'solid 1px #666' };
 //
 
 $(document).ready(function(){

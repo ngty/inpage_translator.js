@@ -26,7 +26,11 @@ Provides an alternative multi-language support for:
    <script type="text/javascript"
      src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js">
    </script>
-   <script type="text/javascript" >...</script>
+   <script type="text/javascript" >
+    // <![CDATA[
+    ...
+    // ]]>
+   </script>
 
    Where '...' is the entire content of inpage_translator_min.js script.
 
@@ -45,8 +49,10 @@ Provides an alternative multi-language support for:
    
    It is possible to override the look & feel of this dropdown by:
 
-   InpageTranslator.LangMenuCss['div'] = { ... }
-   InpageTranslator.LangMenuCss['select'] = { ... }
+   InpageTranslator.LangMenuCss['div'] = 
+     { position:'absolute', top:'40px', right:'10px' };
+   InpageTranslator.LangMenuCss['select'] = 
+     { 'background-color':'#eee', border:'solid 1px #666' };
 
    (see script inpage_translator.js)
 
